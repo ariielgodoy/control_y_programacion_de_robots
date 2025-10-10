@@ -1,0 +1,23 @@
+# === ROS 2 build artifacts ===
+build/
+install/
+log/
+
+# === Python cache ===
+__pycache__/
+*.pyc
+*.pyo
+
+# === Editor / IDE configs ===
+.vscode/
+.idea/
+*.swp
+
+# === Environment / OS files ===
+.env
+*.log
+.DS_Store
+Thumbs.db
+
+# === Colcon / ament temporary logs ===
+colcon*.log
