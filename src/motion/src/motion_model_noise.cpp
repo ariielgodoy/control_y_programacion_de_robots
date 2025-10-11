@@ -1,14 +1,24 @@
 #include <motion/motion_model_noise.hpp>
 #include <random>
+#include <motion/json.hpp>
+using json = nlohmann::json;
 
 MM::MM(): Node("motion_model_noise")
 {
-    pub_pose_ = this->create_publisher<geometry_msgs::msg::Pose>("/estimated_pose", 1);
+    //pub_pose_ = this->create_publisher<geometry_msgs::msg::Pose>("/estimated_pose", 1);
+
+    pub_pose_ = this->create_publisher<std_msgs::msg::String>("/estimated_pose_array", 1);
     pub_twist_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 1);
 
     estimatedPose.position.x = 0;
     estimatedPose.position.y = 0;
     estimatedPose.orientation.z = 0;
+    
+    estimated_pose_array.resize(100);
+
+    for(int j = 0; j < 100; j++){
+        estimated_pose_array[j] = estimatedPose;
+    }
 }
 
 geometry_msgs::msg::Pose MM::generate_noise_sample()
@@ -31,6 +41,24 @@ geometry_msgs::msg::Pose MM::generate_noise_sample()
     return noise_sample;
 }
 
+
+std::string MM::poses_to_json(std::vector<geometry_msgs::msg::Pose> vec_poses)
+{
+    json json_vector_poses; //creamos objeto tipo JSON (resultado)
+    // Por cada pose de nuestro vector
+    for (geometry_msgs::msg::Pose value : vec_poses)
+    {
+        // Transformamos a JSON
+        json json_pose;
+        json_pose["x"] = value.position.x;
+        json_pose["y"] = value.position.y;
+        json_pose["phi"] = value.orientation.z;
+        // attach JSON value
+        json_vector_poses.push_back(json_pose);
+    }
+    // return
+    return json_vector_poses.dump(); // Esto es una cadena de texto!
+}
 
 geometry_msgs::msg::Pose MM::pose_composition(geometry_msgs::msg::Pose p1, geometry_msgs::msg::Pose p2)
 {
@@ -58,6 +86,9 @@ void MM::step_forward()
     geometry_msgs::msg::Pose p_inc_ruidosa;
     geometry_msgs::msg::Twist movement;
     geometry_msgs::msg::Pose new_position;
+    std_msgs::msg::String serialized_pose_array;
+
+    
 
     if (counter < 75)
     {
@@ -81,21 +112,26 @@ void MM::step_forward()
     }
     counter++;
 
-    noise_sample = generate_noise_sample();
-    p_inc_ruidosa = this->pose_composition(pAt, noise_sample);
+    for(int i = 0; i < 100; i++){
+        noise_sample = generate_noise_sample();
+        p_inc_ruidosa = this->pose_composition(pAt, noise_sample);
+        new_position = this->pose_composition(this->estimated_pose_array[i], p_inc_ruidosa);
+        this->estimated_pose_array[i] = new_position;
+        
+        //this->estimatedPose = new_position;
+    }
 
-    new_position = this->pose_composition(this->estimatedPose, p_inc_ruidosa);
-    this->estimatedPose = new_position;
+    serialized_pose_array.data = this->poses_to_json(estimated_pose_array);
     movement.linear.x = Vp;
     movement.angular.z = w;
 
-    RCLCPP_INFO(this->get_logger(), "Counter=%d | x=%.2f, y=%.2f, z=%.2f",
+    /*RCLCPP_INFO(this->get_logger(), "Counter=%d | x=%.2f, y=%.2f, z=%.2f",
                 counter,
                 estimatedPose.position.x,
                 estimatedPose.position.y,
-                estimatedPose.orientation.z);
+                estimatedPose.orientation.z);*/
 
-    pub_pose_->publish(new_position);
+    pub_pose_->publish(serialized_pose_array);
     pub_twist_->publish(movement);
 }
 
