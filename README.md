@@ -38,4 +38,9 @@ El objetivo de estas prácticas es comprender y aplicar los fundamentos de **ROS
 - **rclcpp**  
 - **CoppeliaSim**  
 
+---
 
+## Para compilar:
+- Crear workspace
+- Crear package con el nombre motion
+- Clonar el repositorio y sustituir el directorio de /src dentro del paquete por el clonado
