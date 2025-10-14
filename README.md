@@ -38,7 +38,15 @@ El objetivo de estas prácticas es comprender y aplicar los fundamentos de **ROS
 - **rclcpp**  
 - **CoppeliaSim**  
 
----
+##  Autor
+
+**Nombre del alumno: Juan Ariel Godoy Báez**
+
+**Grado en Ingeniería Electrónica, Robótica y Mecatrónica – Universidad de Málaga**
+
+## Próximamente
+
+- **Práctica 3**
 
 ## Para compilar:
 - Crear workspace
