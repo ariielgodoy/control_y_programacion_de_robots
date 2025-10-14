@@ -1,13 +1,13 @@
-# 🦾 Control y Programación de Robots
+# Control y Programación de Robots
 
 Repositorio de prácticas de la asignatura **Control y Programación de Robots**, realizadas durante el curso académico 2025.  
 El objetivo de estas prácticas es comprender y aplicar los fundamentos de **ROS 2**, la **comunicación entre nodos**, y el **control y localización de robots** mediante programación en **C++**.
 
 ---
 
-## 📚 Contenido
+## Contenido
 
-### 🧩 Práctica 1 – Publicación y suscripción en ROS 2
+### Práctica 1 – Publicación y suscripción en ROS 2
 **Objetivos:**
 - Introducir el modelo de comunicación **publisher/subscriber** en ROS 2.  
 - Utilizar los mensajes estándar de los paquetes:
@@ -20,7 +20,7 @@ El objetivo de estas prácticas es comprender y aplicar los fundamentos de **ROS
 
 ---
 
-### 🎲 Práctica 2 – Generación de partículas con ruido
+### Práctica 2 – Generación de partículas con ruido
 **Objetivos:**
 - Introducir el concepto de **representación probabilística del estado del robot** mediante partículas.
 - Implementar un generador de partículas que simule la **incertidumbre del posicionamiento** basada en la odometría.
@@ -31,16 +31,11 @@ El objetivo de estas prácticas es comprender y aplicar los fundamentos de **ROS
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 - **ROS 2 Humble**  
 - **C++**  
 - **rclcpp**  
-- **rviz2 / Gazebo (según práctica)**  
+- **CoppeliaSim**  
 
----
-
-
-
-## 📁 Estructura del repositorio
 
