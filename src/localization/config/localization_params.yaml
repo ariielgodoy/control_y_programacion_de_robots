@@ -1,0 +1,24 @@
+localization_pf:
+  ros__parameters:
+    num_particles: 1000
+    num_beacons: 3  
+    beacons_pos: [0.0,5.0, 5.0,0.0, 0.0,-5.0, -1.0,0.0, -1.0,-1.0] # X,Y coordinates of each beacon
+    beacons_names: ["beacon_1","beacon_2","beacon_3","beacon_4","beacon_5"] # Beacons names
+    random_beacon: true #if true only one random beacon is selected; if false, all beacons are considered
+    var_range: [0.005, 0.005, 0.005, 0.03, 0.04] #Variance for range meassurements from each beacon
+    var_bearing: [0.005, 0.005, 0.005, 0.03, 0.04] #Variance for bearing meassurements from each beacon if use_bearing is true
+    var_motion: [0.5, 0.25, 0.1] #variance for motion model inc x, y, theta; square of standard deviation ;) 
+    initial_est: [0.0, 0.0, 0.0] #initial pose estimation 
+    sparse_square: 0.0 #double parameter:particles are generated around initial_est within a square of dimmensions sparse_square^2
+         
+
+localization_lse:
+  ros__parameters:
+    num_beacons:  5   # Number of beacons in the environment
+    beacons_pos: [-3.0,0.5, -1.2,3.0, -1.3,-3.0, -1.7,0.1, -4.0,4.0] # Positions x,y for each beacon
+    beacons_names: ["beacon_1","beacon_2","beacon_3","beacon_4","beacon_5"] # Beacons names
+    initial_est: [0.0,0.0,0.0] # initial pose estimation (x,y,phi)
+    var_range: [0.01,0.01,0.01,0.01,0.01] # variance for range each meassurement
+    
+    use_var: true # for weighted LSE
+    use_var_range_proportional: false   # true-> variance = (var_range)*(distance_to_beacon) 

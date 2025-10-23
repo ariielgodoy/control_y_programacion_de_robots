@@ -1,0 +1,13 @@
+<launch>
+  
+  <node pkg="localization" exec="pf" name="localization_pf" output="screen">
+    <param from="$(find-pkg-share localization)/config/localization_params.yaml"/>
+  </node>
+
+  <node pkg="keyboard_control" exec="keyboard_control_plus" name="keyboard_control" output="screen" launch-prefix="xterm -e">
+    <param name="linear_v_inc" value="0.2" />
+    <param name="angular_v_inc" value="0.4" />
+    <param name="publish_topic" value="/cmd_vel" />
+  </node>
+
+</launch>

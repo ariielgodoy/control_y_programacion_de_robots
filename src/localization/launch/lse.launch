@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="localization" exec="lse" name="localization_lse">
+    <param from="$(find-pkg-share localization)/config/localization_params.yaml"/>
+  </node>
+</launch>
