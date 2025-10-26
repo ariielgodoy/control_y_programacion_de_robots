@@ -7,7 +7,7 @@ localization_pf:
     random_beacon: true #if true only one random beacon is selected; if false, all beacons are considered
     var_range: [0.005, 0.005, 0.005, 0.03, 0.04] #Variance for range meassurements from each beacon
     var_bearing: [0.005, 0.005, 0.005, 0.03, 0.04] #Variance for bearing meassurements from each beacon if use_bearing is true
-    var_motion: [0.5, 0.25, 0.1] #variance for motion model inc x, y, theta; square of standard deviation ;) 
+    var_motion: [0.01, 0.025, 0.005] #variance for motion model inc x, y, theta; square of standard deviation ;) 
     initial_est: [0.0, 0.0, 0.0] #initial pose estimation 
     sparse_square: 0.0 #double parameter:particles are generated around initial_est within a square of dimmensions sparse_square^2
          

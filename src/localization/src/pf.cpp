@@ -380,8 +380,19 @@ void Pf::execute_pf(const std_msgs::msg::String::SharedPtr msg)
     unsigned max_index;
     p.col(3).maxCoeff(&max_index);
     // Getting the average value
-    //auto mean_x = p.col(0).mean();
-    //auto mean_y = p.col(1).mean();
+    auto mean_x = p.col(0).mean();
+    auto mean_y = p.col(1).mean();
+
+    double weighted_mean_x = 0;
+    double weighted_mean_y = 0;
+    double weights = 0;
+    
+
+    for(int i = 0; i < p.col(0).rows(); i++){
+        weighted_mean_x = weighted_mean_x + p(i, 0)*p(i, 3);
+        weighted_mean_y = weighted_mean_y + p(i, 1)*p(i, 3);
+        weights = weights + p(i,3);
+    }
 
     //debug: checking the goodness of the selected particle
     RCLCPP_INFO_STREAM(this->get_logger(),"--------------------");
@@ -391,9 +402,38 @@ void Pf::execute_pf(const std_msgs::msg::String::SharedPtr msg)
     RCLCPP_INFO_STREAM(this->get_logger(),"Innovation:" <<dd(max_index)-dd_m(max_index)<<","<<aa(max_index)-aa_m(max_index));
     
     //S et the estimated pose to the selected particle and publish it!
-    estimatedPose.position.x = p(max_index,0);  //mean_x;
+    /*estimatedPose.position.x = p(max_index,0);  //mean_x;
     estimatedPose.position.y = p(max_index,1);  //mean_y;//
-    estimatedPose.orientation.z = p(max_index,2);
+    estimatedPose.orientation.z = p(max_index,2);*/
+    if (weights <= 1e-9) {
+        RCLCPP_WARN(this->get_logger(), "Weights sum is zero or too small — fallback to mean()");
+        weights = 1.0;
+        weighted_mean_x = p.col(0).mean();
+        weighted_mean_y = p.col(1).mean();
+    }
+
+
+    //media del angulo
+    double sum_sin = 0.0;
+    double sum_cos = 0.0;
+    double sum_weights = 0.0;
+
+    for (int i = 0; i < p.rows(); ++i) {
+        double w = p(i, 3);          // peso de la partícula
+        double theta = p(i, 2);      // orientación de la partícula
+        sum_sin = sum_sin + w * sin(theta);
+        sum_cos = sum_cos + w * cos(theta);
+        sum_weights = sum_weights + w;
+    }
+
+    if (sum_weights <= 1e-9) sum_weights = 1.0;  // fallback seguro
+
+    double mean_theta = atan2(sum_sin / sum_weights, sum_cos / sum_weights);
+
+
+    estimatedPose.position.x = weighted_mean_x/weights;  //mean_x;
+    estimatedPose.position.y = weighted_mean_y/weights;  //mean_y;//
+    estimatedPose.orientation.z = mean_theta;//p(max_index,2);
     pub_->publish(estimatedPose);
 }
 
