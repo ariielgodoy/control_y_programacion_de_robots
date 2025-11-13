@@ -14,7 +14,7 @@ localization_pf:
 
 localization_lse:
   ros__parameters:
-    num_beacons:  5   # Number of beacons in the environment
+    num_beacons:  2   # Number of beacons in the environment
     beacons_pos: [-3.0,0.5, -1.2,3.0, -1.3,-3.0, -1.7,0.1, -4.0,4.0] # Positions x,y for each beacon
     beacons_names: ["beacon_1","beacon_2","beacon_3","beacon_4","beacon_5"] # Beacons names
     initial_est: [0.0,0.0,0.0] # initial pose estimation (x,y,phi)
