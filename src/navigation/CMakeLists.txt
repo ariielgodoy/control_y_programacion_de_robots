@@ -10,6 +10,38 @@ find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+
+find_package(rosidl_default_generators REQUIRED)
+rosidl_generate_interfaces(${PROJECT_NAME}
+"srv/Start.srv"
+)
+
+include_directories(
+  include
+)
+
+
+add_executable(movement src/reactive.cpp)
+
+ament_target_dependencies(movement rclcpp geometry_msgs sensor_msgs)
+
+rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME}
+"rosidl_typesupport_cpp")
+target_link_libraries(movement "${cpp_typesupport_target}")
+
+
+
+install(DIRECTORY
+  DESTINATION share/${PROJECT_NAME}
+)
+
+
+
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -22,5 +54,11 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+
+install(TARGETS
+  movement
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()
