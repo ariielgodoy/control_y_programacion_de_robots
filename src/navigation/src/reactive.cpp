@@ -6,21 +6,21 @@ using std::placeholders::_3;
 
 reactive::reactive(): Node("reactive_navigation")
 {
-    server_start_ = this->create_service<navigation::srv::Start>
-    ("start_service", std::bind(&reactive::handle_start_service, this,
+    server_start_ = this->create_service<navigation::srv::Power>
+    ("Power", std::bind(&reactive::handle_start_service, this,
     _1,_2,_3));
     pub_movement = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 1);
     sub_laser = this -> create_subscription<sensor_msgs::msg::LaserScan>("/laser_scan", 10,
     std::bind(&reactive::spot_obstacle, this, _1));
 
-    active = true;
+    active = false;
 }
 
 reactive::~reactive(){}
 
 void reactive::handle_start_service(const std::shared_ptr<rmw_request_id_t> request_header,
-        const std::shared_ptr<navigation::srv::Start::Request> request,
-        std::shared_ptr<navigation::srv::Start::Response> response)
+        const std::shared_ptr<navigation::srv::Power::Request> request,
+        std::shared_ptr<navigation::srv::Power::Response> response)
 {
     RCLCPP_INFO(this->get_logger(), "Service start_service Triggered");
     this->active = !this->active;
